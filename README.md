@@ -108,7 +108,7 @@ class MyExampleClass
 }
 ```
 
-##Credit
+## Credit
 
 Thanks to [Scotty Bowler](https://github.com/scottybo) for creating this package initially. We are extending it to use for Laravel 9.
 
