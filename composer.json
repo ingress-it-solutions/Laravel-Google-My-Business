@@ -1,32 +1,32 @@
 {
-    "name": "scottybo/laravel-google-my-business",
+    "name": "ingress-it-solutions/laravel-google-my-business",
     "description": "A package for Laravel which implements the Google My Business API",
-    "keywords": ["google", "google my business", "laravel", "laravel5"],
+    "keywords": ["google", "google my business", "laravel", "laravel5", "ingressit", "ultim8e"],
     "license": "Apache-2.0",
     "authors": [
         {
-            "name": "Scott Bowler",
-            "email": "scott.bowler@dcsworldwide.net"
+            "name": "Ingress Team",
+            "email": "hello@ingressit.com"
         }
     ],
     "minimum-stability": "stable",
     "require": {
         "php": ">=7.2",
-        "illuminate/support": "6.* || 7.* || 8.*",
+        "illuminate/support": "6.* || 7.* || 8.* || 9.*",
         "google/apiclient": "^2.0"
     },
     "autoload": {
         "psr-4": {
-            "Scottybo\\LaravelGoogleMyBusiness\\": "src"
+            "IngressITSolutions\\LaravelGoogleMyBusiness\\": "src"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Scottybo\\LaravelGoogleMyBusiness\\GoogleMyBusinessServiceProvider"
+                "IngressITSolutions\\LaravelGoogleMyBusiness\\GoogleMyBusinessServiceProvider"
             ],
             "aliases": {
-                "GoogleMyBusiness": "Scottybo\\LaravelGoogleMyBusiness\\Facades\\GoogleMyBusinessFacade"
+                "GoogleMyBusiness": "IngressITSolutions\\LaravelGoogleMyBusiness\\Facades\\GoogleMyBusinessFacade"
             }
         }
     }

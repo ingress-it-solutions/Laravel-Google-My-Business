@@ -1,6 +1,6 @@
 <?php
 
-namespace Scottybo\LaravelGoogleMyBusiness;
+namespace IngressITSolutions\LaravelGoogleMyBusiness;
 
 use Google_Client;
 use Illuminate\Support\ServiceProvider;
@@ -26,6 +26,9 @@ class GoogleMyBusinessServiceProvider extends ServiceProvider
             $client = new Google_Client(config('google'));
             return new GoogleMyBusiness($client);
         });
-        $this->app->alias(GoogleMyBusiness::class, 'laravel-google-my-business');
+        $this->app->alias(
+            GoogleMyBusiness::class,
+            'laravel-google-my-business'
+        );
     }
 }

@@ -22,27 +22,25 @@ There isn't a pretty way to do this, but all you need to do is open:
 And in the `doExecute` function modify as follows
 
 ```php
-      $httpHandler = HttpHandlerFactory::build($client);
-      
-      // Add the header to the request
-      $request = $request->withHeader('X-GOOG-API-FORMAT-VERSION', '2');
+$httpHandler = HttpHandlerFactory::build($client);
+
+// Add the header to the request
+$request = $request->withHeader('X-GOOG-API-FORMAT-VERSION', '2');
 ```
 
 Once you've finished debugging, remove this added line.
 
 ## Installation
 
-Run `composer require scottybo/laravel-google-my-business`
+Run `composer require ingress-it-solutions/laravel-google-my-business`
 
 Or to install via composer - edit your composer.json to require the package.
 
 "require": {
-    "scottbo/laravel-google-my-business": "1.*"
+"ingress-it-solutions/laravel-google-my-business": "2.\*"
 }
 
 Then run `composer update` in your terminal to pull it in.
-
-
 
 ## Laravel
 
@@ -51,13 +49,13 @@ Then run `composer update` in your terminal to pull it in.
 To use this Google My Business package in a Laravel project add the following to the `providers` array in your `config/app.php`
 
 ```php
-Scottybo\LaravelGoogleMyBusiness\GoogleMyBusinessServiceProvider::class,
+IngressITSolutions\LaravelGoogleMyBusiness\GoogleMyBusinessServiceProvider::class,
 ```
 
 Next add the following to the `aliases` array in your `config/app.php`
 
 ```php
-'GoogleMyBusiness' => Scottybo\LaravelGoogleMyBusiness\GoogleMyBusiness::class
+'GoogleMyBusiness' => IngressITSolutions\LaravelGoogleMyBusiness\GoogleMyBusiness::class
 ```
 
 ## Google My Business Discovery document
@@ -67,64 +65,63 @@ The Google My Business API discovery document is a JSON document that describes 
 `mybusiness_google_rest_v4p4.json` has been included with this project for your reference (downloaded from: https://developers.google.com/my-business/samples/)
 
 **Tips**
- - For a guide on Google Discovery documents see: https://developers.google.com/discovery/v1/using#discovery-doc
- - A useful tool for browsing this massive document is: http://jsonviewer.stack.hu/
- - Join the discussion! https://support.google.com/business/community?hl=en (old platform for discussion: https://www.en.advertisercommunity.com/t5/Google-My-Business-API/bd-p/gmb-api)
 
+- For a guide on Google Discovery documents see: https://developers.google.com/discovery/v1/using#discovery-doc
+- A useful tool for browsing this massive document is: http://jsonviewer.stack.hu/
+- Join the discussion! https://support.google.com/business/community?hl=en (old platform for discussion: https://www.en.advertisercommunity.com/t5/Google-My-Business-API/bd-p/gmb-api)
 
 ## Code example
- 
+
 (Work in progress)
 
 ```php
 use Google; // See: https://github.com/pulkitjalan/google-apiclient
 use GoogleMyBusiness;
 
-
 class MyExampleClass
 {
+  function authRedirect()
+  {
+    // Define the GMB scope
+    $scopes = ['https://www.googleapis.com/auth/plus.business.manage'];
 
-    function authRedirect() {
+    // Define any configs that overrride the /config/google.php defaults from pulkitjalan/google-apiclient
+    $googleConfig = array_merge(config('google'), [
+      'scopes' => $scopes,
+      'redirect_uri' =>
+        config('app.callback_url') . '/callback/google/mybusiness',
+    ]);
 
-        // Define the GMB scope
-        $scopes = [
-            'https://www.googleapis.com/auth/plus.business.manage'
-        ];
+    // Generate an auth request URL
+    $googleClient = new Google($googleConfig);
+    $loginUrl = $googleClient->createAuthUrl();
 
-        // Define any configs that overrride the /config/google.php defaults from pulkitjalan/google-apiclient
-        $googleConfig = array_merge(config('google'),[
-            'scopes' => $scopes,
-            'redirect_uri' => config('app.callback_url').'/callback/google/mybusiness'
-        ]);
+    // Send user to Google for Authorisation
+    return redirect()->away($loginUrl);
+  }
 
-        // Generate an auth request URL
-        $googleClient = new Google($googleConfig);
-        $loginUrl = $googleClient->createAuthUrl();
-        
-        // Send user to Google for Authorisation
-        return redirect()->away($loginUrl);
-    }
-    
-    function getAccountName(Google $googleClient) {
-        $gmb = new GoogleMyBusiness($googleClient);
-        return $gmb->getAccountName();
-    }
-
+  function getAccountName(Google $googleClient)
+  {
+    $gmb = new GoogleMyBusiness($googleClient);
+    return $gmb->getAccountName();
+  }
 }
-
 ```
 
+##Credit
+
+Thanks to [Scotty Bowler](https://github.com/scottybo) for creating this package initially. We are extending it to use for Laravel 9.
 
 ## Useful links
 
 Mostly for my reference as I develop this package, but you might find them useful too!
 
- - NEW COMMUNITY URL: https://support.google.com/business/community?hl=en
- - https://www.en.advertisercommunity.com/t5/Google-My-Business-API/Create-Post-with-My-Business-API/td-p/1704175
- - https://developers.google.com/api-client-library/php/start/get_started
- - https://developers.google.com/identity/protocols/OAuth2WebServer
- - https://developers.google.com/identity/protocols/googlescopes
- - https://developers.google.com/my-business/reference/rest/v4/accounts
- - https://developers.google.com/my-business/content/get-started
- - https://github.com/google/google-auth-library-php
- - https://github.com/pulkitjalan/google-apiclient/issues/23
+- NEW COMMUNITY URL: https://support.google.com/business/community?hl=en
+- https://www.en.advertisercommunity.com/t5/Google-My-Business-API/Create-Post-with-My-Business-API/td-p/1704175
+- https://developers.google.com/api-client-library/php/start/get_started
+- https://developers.google.com/identity/protocols/OAuth2WebServer
+- https://developers.google.com/identity/protocols/googlescopes
+- https://developers.google.com/my-business/reference/rest/v4/accounts
+- https://developers.google.com/my-business/content/get-started
+- https://github.com/google/google-auth-library-php
+- https://github.com/pulkitjalan/google-apiclient/issues/23
